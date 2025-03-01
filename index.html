@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Chakra Meditation Environment</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/aframe/1.4.2/aframe.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.2.3/howler.min.js"></script>
+    <style>
+      body {
+        margin: 0;
+        overflow: hidden;
+      }
+      .controls {
+        position: absolute;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: rgba(0, 0, 0, 0.5);
+        padding: 10px;
+        border-radius: 10px;
+        color: white;
+        z-index: 100;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+      .controls button {
+        background: rgba(255, 255, 255, 0.8);
+        border: none;
+        padding: 8px 12px;
+        margin: 5px;
+        border-radius: 5px;
+        cursor: pointer;
+        min-width: 150px;
+      }
+      .chakra-buttons {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+      .chakra-button {
+        margin: 5px;
+        border: none;
+        border-radius: 5px;
+        padding: 8px 12px;
+        cursor: pointer;
+        color: white;
+        font-weight: bold;
+      }
+      .active-chakra {
+        box-shadow: 0 0 10px white;
+      }
+      #root-button {
+        background-color: #ff0000;
+      }
+      #sacral-button {
+        background-color: #ff7f00;
+      }
+      #solar-button {
+        background-color: #ffff00;
+        color: black;
+      }
+      #heart-button {
+        background-color: #00ff00;
+        color: black;
+      }
+      #throat-button {
+        background-color: #00bfff;
+      }
+      #third-eye-button {
+        background-color: #4b0082;
+      }
+      #crown-button {
+        background-color: #8a2be2;
+      }
+      #ambient-button {
+        background-color: #666666;
+      }
+    </style>
+  </head>
+  <body>
+    <a-scene>
+      <!-- Assets -->
+      <a-assets>
+        <img
+          id="sky-texture"
+          src="/api/placeholder/400/320"
+          alt="sky texture"
+        />
+        <img
+          id="mountain-texture"
+          src="/api/placeholder/400/320"
+          alt="mountain texture"
+        />
+        <img
+          id="water-texture"
+          src="/api/placeholder/400/320"
+          alt="water texture"
+        />
+      </a-assets>
+
+      <!-- Sky -->
+      <a-sky color="#87CEEB"></a-sky>
+
+      <!-- Sun -->
+      <a-sphere
+        position="50 100 -100"
+        radius="15"
+        color="#FDFD96"
+        material="shader: flat"
+        light="type: point; intensity: 0.8; distance: 200"
+      ></a-sphere>
+
+      <!-- Mountains -->
+      <a-entity>
+        <!-- Far mountain range -->
+        <a-triangle
+          color="#6a8e7f"
+          vertex-a="0 35 -150"
+          vertex-b="-100 0 -150"
+          vertex-c="100 0 -150"
+        ></a-triangle>
+        <a-triangle
+          color="#5d7d70"
+          vertex-a="-80 45 -150"
+          vertex-b="-150 0 -150"
+          vertex-c="-10 0 -150"
+        ></a-triangle>
+        <a-triangle
+          color="#4c6e62"
+          vertex-a="80 40 -150"
+          vertex-b="10 0 -150"
+          vertex-c="150 0 -150"
+        ></a-triangle>
+
+        <!-- Closer mountain range -->
+        <a-triangle
+          color="#8ba399"
+          vertex-a="0 25 -100"
+          vertex-b="-60 0 -100"
+          vertex-c="60 0 -100"
+        ></a-triangle>
+        <a-triangle
+          color="#7c9289"
+          vertex-a="-40 30 -100"
+          vertex-b="-100 0 -100"
+          vertex-c="0 0 -100"
+        ></a-triangle>
+        <a-triangle
+          color="#698577"
+          vertex-a="40 28 -100"
+          vertex-b="0 0 -100"
+          vertex-c="100 0 -100"
+        ></a-triangle>
+      </a-entity>
+
+      <!-- Water/Lake -->
+      <a-plane
+        position="0 0 -50"
+        rotation="-90 0 0"
+        width="300"
+        height="200"
+        color="#5d93bc"
+        material="shader: standard; metalness: 0.3; roughness: 0.2; repeat: 30 30; normal-texture-repeat: 30 30;"
+      >
+        <a-animation
+          attribute="material.normalScale"
+          from="0.5 0.5"
+          to="1 1"
+          direction="alternate"
+          dur="10000"
+          repeat="indefinite"
+        ></a-animation>
+      </a-plane>
+
+      <!-- Trees -->
+      <a-entity position="-20 0 -30">
+        <a-cone
+          position="0 8 0"
+          height="14"
+          radius-bottom="5"
+          radius-top="0"
+          color="#2d4c1e"
+        ></a-cone>
+        <a-cone
+          position="0 5 0"
+          height="10"
+          radius-bottom="6"
+          radius-top="1"
+          color="#3a6327"
+        ></a-cone>
+        <a-cylinder
+          position="0 0 0"
+          height="4"
+          radius="0.8"
+          color="#6d4c33"
+        ></a-cylinder>
+      </a-entity>
+
+      <a-entity position="15 0 -40">
+        <a-cone
+          position="0 7 0"
+          height="12"
+          radius-bottom="4"
+          radius-top="0"
+          color="#2d4c1e"
+        ></a-cone>
+        <a-cone
+          position="0 4 0"
+          height="8"
+          radius-bottom="5"
+          radius-top="1"
+          color="#3a6327"
+        ></a-cone>
+        <a-cylinder
+          position="0 0 0"
+          height="3"
+          radius="0.7"
+          color="#6d4c33"
+        ></a-cylinder>
+      </a-entity>
+
+      <!-- Rocks -->
+      <a-entity position="-5 0 -20">
+        <a-sphere position="0 1 0" radius="2" color="#808080"></a-sphere>
+        <a-sphere position="2 0.8 1" radius="1.5" color="#707070"></a-sphere>
+        <a-sphere position="-1 0.5 -1" radius="1" color="#909090"></a-sphere>
+      </a-entity>
+
+      <!-- Meditation spot: Cushion -->
+      <a-cylinder
+        position="0 0.3 -15"
+        radius="1.5"
+        height="0.6"
+        color="#B76E79"
+      ></a-cylinder>
+
+      <!-- Chakra Orbs -->
+      <a-entity position="0 0 -15">
+        <!-- 1. Root Chakra (red) -->
+        <a-sphere
+          id="root-chakra"
+          position="0 0.5 0"
+          radius="0.5"
+          color="#FF0000"
+          material="shader: standard; emissive: #FF0000; emissiveIntensity: 0.5; metalness: 0.2; roughness: 0.3"
+          class="clickable"
+        >
+          <a-animation
+            attribute="material.emissiveIntensity"
+            from="0.5"
+            to="0.8"
+            direction="alternate"
+            dur="2000"
+            repeat="indefinite"
+          ></a-animation>
+          <a-light
+            type="point"
+            color="#FF0000"
+            intensity="0.3"
+            distance="3"
+          ></a-light>
+        </a-sphere>
+
+        <!-- 2. Sacral Chakra (orange) -->
+        <a-sphere
+          id="sacral-chakra"
+          position="0 1.5 0"
+          radius="0.5"
+          color="#FF7F00"
+          material="shader: standard; emissive: #FF7F00; emissiveIntensity: 0.5; metalness: 0.2; roughness: 0.3"
+          class="clickable"
+        >
+          <a-animation
+            attribute="material.emissiveIntensity"
+            from="0.5"
+            to="0.8"
+            direction="alternate"
+            dur="2200"
+            repeat="indefinite"
+          ></a-animation>
+          <a-light
+            type="point"
+            color="#FF7F00"
+            intensity="0.3"
+            distance="3"
+          ></a-light>
+        </a-sphere>
+
+        <!-- 3. Solar Plexus Chakra (yellow) -->
+        <a-sphere
+          id="solar-chakra"
+          position="0 2.5 0"
+          radius="0.5"
+          color="#FFFF00"
+          material="shader: standard; emissive: #FFFF00; emissiveIntensity: 0.5; metalness: 0.2; roughness: 0.3"
+          class="clickable"
+        >
+          <a-animation
+            attribute="material.emissiveIntensity"
+            from="0.5"
+            to="0.8"
+            direction="alternate"
+            dur="2400"
+            repeat="indefinite"
+          ></a-animation>
+          <a-light
+            type="point"
+            color="#FFFF00"
+            intensity="0.3"
+            distance="3"
+          ></a-light>
+        </a-sphere>
+
+        <!-- 4. Heart Chakra (green) -->
+        <a-sphere
+          id="heart-chakra"
+          position="0 3.5 0"
+          radius="0.5"
+          color="#00FF00"
+          material="shader: standard; emissive: #00FF00; emissiveIntensity: 0.5; metalness: 0.2; roughness: 0.3"
+          class="clickable"
+        >
+          <a-animation
+            attribute="material.emissiveIntensity"
+            from="0.5"
+            to="0.8"
+            direction="alternate"
+            dur="2600"
+            repeat="indefinite"
+          ></a-animation>
+          <a-light
+            type="point"
+            color="#00FF00"
+            intensity="0.3"
+            distance="3"
+          ></a-light>
+        </a-sphere>
+
+        <!-- 5. Throat Chakra (blue) -->
+        <a-sphere
+          id="throat-chakra"
+          position="0 4.5 0"
+          radius="0.5"
+          color="#00BFFF"
+          material="shader: standard; emissive: #00BFFF; emissiveIntensity: 0.5; metalness: 0.2; roughness: 0.3"
+          class="clickable"
+        >
+          <a-animation
+            attribute="material.emissiveIntensity"
+            from="0.5"
+            to="0.8"
+            direction="alternate"
+            dur="2800"
+            repeat="indefinite"
+          ></a-animation>
+          <a-light
+            type="point"
+            color="#00BFFF"
+            intensity="0.3"
+            distance="3"
+          ></a-light>
+        </a-sphere>
+
+        <!-- 6. Third Eye Chakra (indigo) -->
+        <a-sphere
+          id="third-eye-chakra"
+          position="0 5.5 0"
+          radius="0.5"
+          color="#4B0082"
+          material="shader: standard; emissive: #4B0082; emissiveIntensity: 0.5; metalness: 0.2; roughness: 0.3"
+          class="clickable"
+        >
+          <a-animation
+            attribute="material.emissiveIntensity"
+            from="0.5"
+            to="0.8"
+            direction="alternate"
+            dur="3000"
+            repeat="indefinite"
+          ></a-animation>
+          <a-light
+            type="point"
+            color="#4B0082"
+            intensity="0.3"
+            distance="3"
+          ></a-light>
+        </a-sphere>
+
+        <!-- 7. Crown Chakra (purple/violet) -->
+        <a-sphere
+          id="crown-chakra"
+          position="0 6.5 0"
+          radius="0.5"
+          color="#8A2BE2"
+          material="shader: standard; emissive: #8A2BE2; emissiveIntensity: 0.5; metalness: 0.2; roughness: 0.3"
+          class="clickable"
+        >
+          <a-animation
+            attribute="material.emissiveIntensity"
+            from="0.5"
+            to="0.8"
+            direction="alternate"
+            dur="3200"
+            repeat="indefinite"
+          ></a-animation>
+          <a-light
+            type="point"
+            color="#8A2BE2"
+            intensity="0.3"
+            distance="3"
+          ></a-light>
+        </a-sphere>
+      </a-entity>
+
+      <!-- Ambient Light -->
+      <a-light type="ambient" color="#BBB" intensity="0.5"></a-light>
+
+      <!-- Directional Light (sun) -->
+      <a-light
+        type="directional"
+        color="#FFF"
+        intensity="0.6"
+        position="-1 1 0"
+      ></a-light>
+
+      <!-- Fog for depth -->
+      <a-scene fog="type: linear; color: #B4C5DF; near: 20; far: 200"></a-scene>
+
+      <!-- Camera with controls -->
+      <a-entity position="0 1.6 0">
+        <a-camera>
+          <a-cursor color="#4CC3D9" raycaster="objects: .clickable"></a-cursor>
+        </a-camera>
+      </a-entity>
+    </a-scene>
+
+    <!-- UI Controls -->
+    <div class="controls">
+      <div>
+        <button id="play-all">Play All Sounds</button>
+        <button id="stop-all">Stop All Sounds</button>
+      </div>
+      <div class="chakra-buttons">
+        <button id="root-button" class="chakra-button">Root (LAM)</button>
+        <button id="sacral-button" class="chakra-button">Sacral (VAM)</button>
+        <button id="solar-button" class="chakra-button">Solar (RAM)</button>
+        <button id="heart-button" class="chakra-button">Heart (YAM)</button>
+        <button id="throat-button" class="chakra-button">Throat (HAM)</button>
+        <button id="third-eye-button" class="chakra-button">
+          Third Eye (OM)
+        </button>
+        <button id="crown-button" class="chakra-button">Crown (AH)</button>
+        <button id="ambient-button" class="chakra-button">Ambient</button>
+      </div>
+    </div>
+
+    <script>
+      // Register A-Frame component to handle Howler.js audio
+      AFRAME.registerComponent("howler-audio", {
+        schema: {
+          src: { type: "string" },
+          loop: { type: "boolean", default: true },
+          volume: { type: "number", default: 0.5 },
+          autoplay: { type: "boolean", default: false },
+        },
+
+        init: function () {
+          // Create a new Howl instance
+          this.sound = new Howl({
+            src: [this.data.src],
+            loop: this.data.loop,
+            volume: this.data.volume,
+            autoplay: this.data.autoplay,
+          });
+
+          // Store the ID for later use
+          this.soundId = null;
+        },
+
+        play: function () {
+          if (this.sound.state() === "loaded") {
+            this.soundId = this.sound.play();
+          } else {
+            this.sound.once("load", () => {
+              this.soundId = this.sound.play();
+            });
+          }
+        },
+
+        pause: function () {
+          if (this.soundId !== null) {
+            this.sound.pause(this.soundId);
+          }
+        },
+
+        stop: function () {
+          if (this.soundId !== null) {
+            this.sound.stop(this.soundId);
+          }
+        },
+
+        remove: function () {
+          if (this.sound) {
+            this.sound.stop();
+            this.sound.unload();
+          }
+        },
+      });
+
+      document.addEventListener("DOMContentLoaded", function () {
+        // Define sounds for each chakra (using placeholder URLs in this example)
+        const sounds = {
+          ambient: {
+            src: "/api/placeholder/400/320", // Ambient background music
+            volume: 0.3,
+          },
+          root: {
+            src: "/api/placeholder/400/320", // Root chakra - LAM sound (frequency ~256 Hz)
+            volume: 0.7,
+          },
+          sacral: {
+            src: "/api/placeholder/400/320", // Sacral chakra - VAM sound (frequency ~288 Hz)
+            volume: 0.7,
+          },
+          solar: {
+            src: "/api/placeholder/400/320", // Solar Plexus - RAM sound (frequency ~320 Hz)
+            volume: 0.7,
+          },
+          heart: {
+            src: "/api/placeholder/400/320", // Heart chakra - YAM sound (frequency ~341 Hz)
+            volume: 0.7,
+          },
+          throat: {
+            src: "/api/placeholder/400/320", // Throat chakra - HAM sound (frequency ~384 Hz)
+            volume: 0.7,
+          },
+          thirdEye: {
+            src: "/api/placeholder/400/320", // Third Eye - OM sound (frequency ~426 Hz)
+            volume: 0.7,
+          },
+          crown: {
+            src: "/api/placeholder/400/320", // Crown chakra - AH sound (frequency ~480 Hz)
+            volume: 0.7,
+          },
+        };
+
+        // Create sound entities for each chakra
+        const soundEntities = {};
+
+        // Create entity for each sound
+        Object.keys(sounds).forEach((key) => {
+          const entity = document.createElement("a-entity");
+          entity.setAttribute("howler-audio", {
+            src: sounds[key].src,
+            loop: true,
+            volume: sounds[key].volume,
+            autoplay: false,
+          });
+          entity.id = `${key}-sound`;
+          document.querySelector("a-scene").appendChild(entity);
+          soundEntities[key] = entity;
+        });
+
+        // Set up UI controls
+        const playAllButton = document.getElementById("play-all");
+        const stopAllButton = document.getElementById("stop-all");
+
+        // Individual chakra buttons
+        const rootButton = document.getElementById("root-button");
+        const sacralButton = document.getElementById("sacral-button");
+        const solarButton = document.getElementById("solar-button");
+        const heartButton = document.getElementById("heart-button");
+        const throatButton = document.getElementById("throat-button");
+        const thirdEyeButton = document.getElementById("third-eye-button");
+        const crownButton = document.getElementById("crown-button");
+        const ambientButton = document.getElementById("ambient-button");
+
+        // Active chakra tracking
+        let activeChakras = {
+          root: false,
+          sacral: false,
+          solar: false,
+          heart: false,
+          throat: false,
+          thirdEye: false,
+          crown: false,
+          ambient: false,
+        };
+
+        // Set up glow animation for active chakras
+        function updateChakraGlow() {
+          Object.keys(activeChakras).forEach((key) => {
+            if (key === "ambient") return; // Skip ambient as it's not a chakra
+
+            const chakraEl = document.getElementById(`${key}-chakra`);
+            if (!chakraEl) return;
+
+            if (activeChakras[key]) {
+              // Enhanced glow for active chakra
+              chakraEl.setAttribute("material", {
+                emissiveIntensity: 1.0,
+              });
+              // Enlarge active chakra slightly
+              chakraEl.setAttribute("scale", "1.2 1.2 1.2");
+            } else {
+              // Default glow for inactive chakra
+              chakraEl.setAttribute("material", {
+                emissiveIntensity: 0.5,
+              });
+              // Return to normal size
+              chakraEl.setAttribute("scale", "1 1 1");
+            }
+          });
+        }
+
+        // Function to toggle individual sounds
+        function toggleSound(soundKey) {
+          const entity = soundEntities[soundKey];
+
+          if (activeChakras[soundKey]) {
+            // If active, stop it
+            entity.components["howler-audio"].stop();
+            activeChakras[soundKey] = false;
+          } else {
+            // If inactive, play it
+            entity.components["howler-audio"].play();
+            activeChakras[soundKey] = true;
+          }
+
+          // Update UI
+          updateButtonStates();
+          // Update chakra visual state
+          updateChakraGlow();
+        }
+
+        // Function to update button UI states
+        function updateButtonStates() {
+          // Update chakra buttons
+          rootButton.classList.toggle("active-chakra", activeChakras.root);
+          sacralButton.classList.toggle("active-chakra", activeChakras.sacral);
+          solarButton.classList.toggle("active-chakra", activeChakras.solar);
+          heartButton.classList.toggle("active-chakra", activeChakras.heart);
+          throatButton.classList.toggle("active-chakra", activeChakras.throat);
+          thirdEyeButton.classList.toggle(
+            "active-chakra",
+            activeChakras.thirdEye
+          );
+          crownButton.classList.toggle("active-chakra", activeChakras.crown);
+          ambientButton.classList.toggle(
+            "active-chakra",
+            activeChakras.ambient
+          );
+        }
+
+        // Play all sounds
+        playAllButton.addEventListener("click", function () {
+          Object.keys(sounds).forEach((key) => {
+            soundEntities[key].components["howler-audio"].play();
+            activeChakras[key] = true;
+          });
+          updateButtonStates();
+          updateChakraGlow();
+        });
+
+        // Stop all sounds
+        stopAllButton.addEventListener("click", function () {
+          Object.keys(sounds).forEach((key) => {
+            soundEntities[key].components["howler-audio"].stop();
+            activeChakras[key] = false;
+          });
+          updateButtonStates();
+          updateChakraGlow();
+        });
+
+        // Set up chakra button click handlers
+        rootButton.addEventListener("click", () => toggleSound("root"));
+        sacralButton.addEventListener("click", () => toggleSound("sacral"));
+        solarButton.addEventListener("click", () => toggleSound("solar"));
+        heartButton.addEventListener("click", () => toggleSound("heart"));
+        throatButton.addEventListener("click", () => toggleSound("throat"));
+        thirdEyeButton.addEventListener("click", () => toggleSound("thirdEye"));
+        crownButton.addEventListener("click", () => toggleSound("crown"));
+        ambientButton.addEventListener("click", () => toggleSound("ambient"));
+
+        // Add click event listeners to chakra spheres in the scene
+        document
+          .querySelector("#root-chakra")
+          .addEventListener("click", () => toggleSound("root"));
+        document
+          .querySelector("#sacral-chakra")
+          .addEventListener("click", () => toggleSound("sacral"));
+        document
+          .querySelector("#solar-chakra")
+          .addEventListener("click", () => toggleSound("solar"));
+        document
+          .querySelector("#heart-chakra")
+          .addEventListener("click", () => toggleSound("heart"));
+        document
+          .querySelector("#throat-chakra")
+          .addEventListener("click", () => toggleSound("throat"));
+        document
+          .querySelector("#third-eye-chakra")
+          .addEventListener("click", () => toggleSound("thirdEye"));
+        document
+          .querySelector("#crown-chakra")
+          .addEventListener("click", () => toggleSound("crown"));
+
+        // Add some gentle animation to the water
+        const water = document.querySelector("a-plane");
+        let time = 0;
+
+        function animate() {
+          time += 0.01;
+          water.setAttribute("position", `0 ${Math.sin(time) * 0.05} -50`);
+          requestAnimationFrame(animate);
+        }
+
+        animate();
+      });
+    </script>
+  </body>
+</html>
